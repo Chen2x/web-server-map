@@ -35,10 +35,6 @@ class Page {
     leng = len;
     x = xp;
     y = yp;
-    //fill(0, 150, 240, 40);
-    //rect(x, y, len, -10);
-    //fill(0);
-    //text(name, x, y);
   }
 
   void drawNode() {

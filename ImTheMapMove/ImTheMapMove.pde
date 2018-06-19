@@ -31,9 +31,10 @@ void draw() {
   for (int i = 0; i < pages.size(); i++) {
     pages.get(i).drawLine();
     pages.get(i).drawNode();
+    
   }
-
-  //textSize(20); //<>//
+ //<>//
+  //textSize(20);
   //text("Device_01", width/2, 50);
   ////noLoop();
   //getXML(xml);
@@ -147,11 +148,15 @@ void familyTree() {
   }
 }
 
-//void mouseDragged(){
-//  for (int p = 0; p < pages.size(); p ++){
-//    if ((mouseX > pages.get(p).x())&&(mouseY > pages.get(p).y()-10)&&(mouseX < (pages.get(p).x()+pages.get(p).leng()))&&(mouseX < pages.get(p).y())){
-//      pages.get(p).storeNode(mouseX, mouseY, pages.get(p).leng());
-//    }
-//  }
-
-//}
+void mouseDragged(){
+  //println(mousePressed);
+  for (int p = 0; p < pages.size(); p ++){
+    //println("yuuuhhhhh");
+    if ((mouseX > pages.get(p).x())&&(mouseY > pages.get(p).y()-10)&&(mouseX < (pages.get(p).x()+pages.get(p).leng()))&&(mouseY < pages.get(p).y())){
+      println("TRUUUUU");
+      pages.get(p).storeNode(mouseX-pages.get(p).leng()/2, mouseY+5, pages.get(p).leng());
+      pages.get(p).drawLine();
+      pages.get(p).drawNode();
+    }
+  }
+}
