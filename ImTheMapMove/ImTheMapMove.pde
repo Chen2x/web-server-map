@@ -2,6 +2,7 @@ import processing.pdf.*;
 
 XML xml;
 Boolean xmlpages = true;
+Boolean record = false;
 
 ArrayList<Page> pages = new ArrayList<Page>();
 void setup() {
@@ -22,16 +23,24 @@ void setup() {
 }
 
 void draw() {
+  if (record){
+    beginRecord(PDF, "GUI_Structure.PDF");
+  }
   background(255);
-  textSize(20); //<>//
-  text("Device_01", width/2, 50);
-  text("Main Menu", width/2, 150);
-  textSize(12);
+   //<>//
   //drawMap(pages.get(0), 50, 0, width, width/2, 50);
   for (int i = 0; i < pages.size(); i++) {
     pages.get(i).drawLine();
     pages.get(i).drawNode();
     
+  }
+  textSize(20);
+  text("Device_01", width/2, 50);
+  text("Main Menu", width/2, 150);
+  textSize(12);
+  if (record){
+    endRecord();
+    exit();
   }
  //<>//
   //textSize(20);
@@ -158,5 +167,11 @@ void mouseDragged(){
       pages.get(p).drawLine();
       pages.get(p).drawNode();
     }
+  }
+}
+
+void keyPressed(){
+  if (keyCode == ENTER){
+    record = true;
   }
 }

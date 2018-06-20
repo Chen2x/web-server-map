@@ -38,16 +38,19 @@ class Page {
   }
 
   void drawNode() {
-    fill(0, 150, 240, 40);
-    rect(x, y, leng, -10);
-    fill(0);
-    text(name, x, y);
+    if (name != "Device_01") {
+      fill(0, 150, 240, 40);
+      rect(x, y, leng, -10);
+      fill(0);
+      text(name, x, y);
+    }
   }
 
   void drawLine() {    
 
     for (int i=0; i<children.size(); i++) {
       if ((name().equals("Reporting"))||(name().equals("Production"))||(name().equals("System"))||(name().equals("Access"))) {     
+        stroke(200);
         line(width/2, 150, children.get(i).x(), children.get(i).y());
       } else if ((name().equals("Device_01"))) {
         y = 100;
