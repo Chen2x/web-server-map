@@ -14,7 +14,7 @@ void setup() {
   fill(0);
   textSize(20);
   text("Device_01", width/2, 50);
-  //noLoop();
+  noLoop();
   getXML(xml);
   familyTree();
   text("Main Menu", width/2, 150);
@@ -159,6 +159,7 @@ void familyTree() {
 
 void mouseDragged(){
   //println(mousePressed);
+  loop();
   for (int p = 0; p < pages.size(); p ++){
     //println("yuuuhhhhh");
     if ((mouseX > pages.get(p).x())&&(mouseY > pages.get(p).y()-10)&&(mouseX < (pages.get(p).x()+pages.get(p).leng()))&&(mouseY < pages.get(p).y())){
@@ -170,8 +171,13 @@ void mouseDragged(){
   }
 }
 
+void mouseReleased(){
+  noLoop();
+}
+
 void keyPressed(){
   if (keyCode == ENTER){
+    loop();
     record = true;
   }
 }
