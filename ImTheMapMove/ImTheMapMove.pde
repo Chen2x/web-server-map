@@ -6,8 +6,8 @@ Boolean record = false;
 
 ArrayList<Page> pages = new ArrayList<Page>();
 void setup() {
-  //size(1200, 1400, PDF, "GUI_Structure.pdf");
-  size(1200, 1400);
+  //size(1200, 1400);
+  size(1200, 1000);
   background(255);
   xml = loadXML("GUI_Structure.xml");
   textSize(12);
@@ -28,7 +28,6 @@ void draw() {
   }
   background(255);
    //<>//
-  //drawMap(pages.get(0), 50, 0, width, width/2, 50);
   for (int i = 0; i < pages.size(); i++) {
     pages.get(i).drawLine();
     pages.get(i).drawNode();
@@ -41,22 +40,7 @@ void draw() {
   if (record){
     endRecord();
     exit();
-  }
- //<>//
-  //textSize(20);
-  //text("Device_01", width/2, 50);
-  ////noLoop();
-  //getXML(xml);
-  //familyTree();
-  ////for (int i = 0; i < pages.size(); i++) { 
-  ////  println("name:", pages.get(i).name(), "     parent:", pages.get(i).parent(), "      Children:", pages.get(i).childrenName());
-  ////}
-  ////println(pages.get(0).childrenName());
-  //text("Main Menu", width/2, 150);
-  //textSize(12);
-  //drawMap(pages.get(0), 50, 0, width, width/2, 50);
-  ////save("GUI_Structure.jpg");
-  ////exit();
+  } //<>//
 }
 
 void getXML(XML xml) {
@@ -105,7 +89,7 @@ void drawMap(Page parent, int level, int start, int end, int x, int y) {
     int adjx = int(start + k*(end-start)/parent.childrenName().size())+100;
     stroke(200);
     if (parent.childrenName().size()> 15) {
-      adjh=y+250+k*12;
+      adjh=y+150+k*12;
       adjx = int(start + k*(end-start)/parent.childrenName().size())+100;
       start = -140;
       end = width-130;
@@ -114,7 +98,7 @@ void drawMap(Page parent, int level, int start, int end, int x, int y) {
       level = y;
     }
     if (parent.name().equals("Machine Information")) {
-      adjh+=20;
+      adjh-=50;
     } else if (parent.name().equals("Device_01")) {
       adjh+=-100;
       start += 50;
@@ -139,8 +123,6 @@ void drawMap(Page parent, int level, int start, int end, int x, int y) {
       line(x, y, adjx, adjh);
     }
     parent.children().get(k).storeNode(adjx, adjh, int(parent.children().get(k).name().length()*6.5));
-    //fill(0, 150, 240, 40);
-    //rect(adjx, adjh, parent.children().get(k).name().length()*6.5, -10);
     fill(0);
     text(parent.children().get(k).name(), adjx, adjh);
     drawMap(parent.children().get(k), level+100, adjx-width/7, adjx+width/80, adjx, adjh);
@@ -161,9 +143,7 @@ void mouseDragged(){
   //println(mousePressed);
   loop();
   for (int p = 0; p < pages.size(); p ++){
-    //println("yuuuhhhhh");
     if ((mouseX > pages.get(p).x())&&(mouseY > pages.get(p).y()-10)&&(mouseX < (pages.get(p).x()+pages.get(p).leng()))&&(mouseY < pages.get(p).y())){
-      println("TRUUUUU");
       pages.get(p).storeNode(mouseX-pages.get(p).leng()/2, mouseY+5, pages.get(p).leng());
       pages.get(p).drawLine();
       pages.get(p).drawNode();
