@@ -1,5 +1,5 @@
 import processing.pdf.*;
-
+Table nodes;
 XML xml;
 Boolean xmlpages = true;
 Boolean record = false;
@@ -10,6 +10,16 @@ void setup() {
   size(1200, 1000);
   background(255);
   xml = loadXML("GUI_Structure.xml");
+  try {
+    nodes = loadTable("nodestore.csv", "header");
+  } catch(Exception e){
+    nodes = new Table();
+    nodes.addColumn("key");
+    nodes.addColumn("name");
+    nodes.addColumn("x");
+    nodes.addColumn("y");
+    drawMap(pages.get(0), 50, 0, width, width/2, 50);
+  }
   textSize(12);
   fill(0);
   textSize(20);
@@ -19,7 +29,7 @@ void setup() {
   familyTree();
   text("Main Menu", width/2, 150);
   textSize(12);
-  drawMap(pages.get(0), 50, 0, width, width/2, 50);
+  
 }
 
 void draw() {
