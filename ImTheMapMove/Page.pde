@@ -34,13 +34,16 @@ class Page {
     childrenName.add(newChild.name());
   }
 
-  void storeNode(int xp, int yp, int len) {
-    leng = len;
+  void storeNode(int xp, int yp) {
     x = xp;
     y = yp;   
     //save.setString("name", name);
     //save.setInt("x", x);
     //save.setInt("y", y);
+  }
+  
+  void storeLen(int len){
+    leng = len;
   }
 
   void drawNode() {

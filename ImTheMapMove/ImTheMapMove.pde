@@ -5,6 +5,7 @@ Table nodes;
 XML xml;
 Boolean xmlpages = true;
 Boolean record = false;
+Boolean fullRun;
 ArrayList<Page> pages = new ArrayList<Page>();
 
 ArrayList<TableRow> pgStore = new ArrayList<TableRow>();
@@ -20,25 +21,34 @@ void setup() {
   textSize(20);
   text("Device_01", width/2, 50);
   noLoop();
-  getXML(xml);
-  familyTree();
-  
+
+  fullRun = (nodes != null);
   if (nodes != null) {
     nodes = loadTable(dataPath("nodestore.csv"), "header");
+    
+    for (TableRow row : nodes.rows()) {
+      Page np = new Page(row.getString("name"), row.getString("parent"));
+      pages.add(np);
+      np.storeNode(row.getInt("x"), row.getInt("y"));
+    }
+  
   } else {
     println("truu");
     nodes = new Table();
-    nodes.addColumn("key");
     nodes.addColumn("name");
+    nodes.addColumn("parent");
     nodes.addColumn("x");
     nodes.addColumn("y");
+    getXML(xml);
+    familyTree();
     drawMap(pages.get(0), 50, 0, width, width/2, 50);
+    setTable();
   }
-  
+
   text("Main Menu", width/2, 150);
   textSize(12);
-  drawMap(pages.get(0), 50, 0, width, width/2, 50);
-  setTable();
+  //drawMap(pages.get(0), 50, 0, width, width/2, 50);
+  //setTable();
 }
 
 void draw() {
@@ -46,11 +56,12 @@ void draw() {
     beginRecord(PDF, "GUI_Structure.PDF");
   }
   background(255);
-
+  
   for (int i = 0; i < pages.size(); i++) {
     pages.get(i).drawLine();
     pages.get(i).drawNode();
   }
+
   textSize(20);
   text("Device_01", width/2, 50);
   text("Main Menu", width/2, 150);
@@ -141,7 +152,8 @@ void drawMap(Page parent, int level, int start, int end, int x, int y) {
       stroke(200);
       line(x, y, adjx, adjh);
     }
-    parent.children().get(k).storeNode(adjx, adjh, int(parent.children().get(k).name().length()*6.5));
+    parent.children().get(k).storeNode(adjx, adjh);
+    parent.children().get(k).storeLen(int(parent.children().get(k).name().length()*6.5));
     fill(0);
     text(parent.children().get(k).name(), adjx, adjh);
     drawMap(parent.children().get(k), level+100, adjx-width/7, adjx+width/80, adjx, adjh);
@@ -158,10 +170,11 @@ void familyTree() {
   }
 }
 
-void setTable(){
-  for (int i = 0; i<pages.size(); i ++){
+void setTable() {
+  for (int i = 0; i<pages.size(); i ++) {
     pgStore.add(nodes.addRow());
     pgStore.get(i).setString("name", pages.get(i).name());
+    pgStore.get(i).setString("parent", pages.get(i).parent());
     pgStore.get(i).setInt("x", pages.get(i).x());
     pgStore.get(i).setInt("y", pages.get(i).y());
   }
@@ -172,7 +185,8 @@ void mouseDragged() {
   loop();
   for (int p = 0; p < pages.size(); p ++) {
     if ((mouseX > pages.get(p).x())&&(mouseY > pages.get(p).y()-10)&&(mouseX < (pages.get(p).x()+pages.get(p).leng()))&&(mouseY < pages.get(p).y())) {
-      pages.get(p).storeNode(mouseX-pages.get(p).leng()/2, mouseY+5, pages.get(p).leng());
+      pages.get(p).storeNode(mouseX-pages.get(p).leng()/2, mouseY+5);
+      pages.get(p).storeLen(pages.get(p).leng());
       pgStore.get(p).setInt("x", pages.get(p).x());
       pgStore.get(p).setInt("y", pages.get(p).y());
       pages.get(p).drawLine();
