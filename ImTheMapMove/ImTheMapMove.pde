@@ -14,7 +14,7 @@ void setup() {
   size(1200, 1000);
   background(255);
   xml = loadXML("GUI_Structure.xml");
-  
+  nodes = loadTable((dataPath("nodestore.csv")));
   textSize(12);
   fill(0);
   textSize(20);
@@ -22,8 +22,9 @@ void setup() {
   noLoop();
   getXML(xml);
   familyTree();
-  if ((new File("nodestore.csv")).exists()) {
-    nodes = loadTable("nodestore.csv", "header");
+  
+  if (nodes != null) {
+    nodes = loadTable(dataPath("nodestore.csv"), "header");
   } else {
     println("truu");
     nodes = new Table();
@@ -33,6 +34,7 @@ void setup() {
     nodes.addColumn("y");
     drawMap(pages.get(0), 50, 0, width, width/2, 50);
   }
+  
   text("Main Menu", width/2, 150);
   textSize(12);
   drawMap(pages.get(0), 50, 0, width, width/2, 50);
@@ -55,7 +57,7 @@ void draw() {
   textSize(12);
   if (record) {
     endRecord();
-    saveTable(nodes, "nodestore.csv");
+    saveTable(nodes, dataPath("nodestore.csv"));
     exit();
   }
 }
