@@ -5,12 +5,15 @@ class Page {
   int x, y, leng;
   ArrayList<Page> children = new ArrayList<Page>();
   ArrayList<String> childrenName = new ArrayList<String>();
+  
 
   Page(String n, String p) {
     name = n;
     parent = p;
+    
   }
-
+  //TableRow save = nodes.addRow();
+  
   String name() {
     return name;
   }
@@ -34,7 +37,10 @@ class Page {
   void storeNode(int xp, int yp, int len) {
     leng = len;
     x = xp;
-    y = yp;
+    y = yp;   
+    //save.setString("name", name);
+    //save.setInt("x", x);
+    //save.setInt("y", y);
   }
 
   void drawNode() {

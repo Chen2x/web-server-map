@@ -1,25 +1,20 @@
-import processing.pdf.*;
+import processing.pdf.*; //<>// //<>//
+import java.io.File;
+
 Table nodes;
 XML xml;
 Boolean xmlpages = true;
 Boolean record = false;
-
 ArrayList<Page> pages = new ArrayList<Page>();
+
+ArrayList<TableRow> pgStore = new ArrayList<TableRow>();
+
 void setup() {
   //size(1200, 1400);
   size(1200, 1000);
   background(255);
   xml = loadXML("GUI_Structure.xml");
-  try {
-    nodes = loadTable("nodestore.csv", "header");
-  } catch(Exception e){
-    nodes = new Table();
-    nodes.addColumn("key");
-    nodes.addColumn("name");
-    nodes.addColumn("x");
-    nodes.addColumn("y");
-    drawMap(pages.get(0), 50, 0, width, width/2, 50);
-  }
+  
   textSize(12);
   fill(0);
   textSize(20);
@@ -27,30 +22,42 @@ void setup() {
   noLoop();
   getXML(xml);
   familyTree();
+  if ((new File("nodestore.csv")).exists()) {
+    nodes = loadTable("nodestore.csv", "header");
+  } else {
+    println("truu");
+    nodes = new Table();
+    nodes.addColumn("key");
+    nodes.addColumn("name");
+    nodes.addColumn("x");
+    nodes.addColumn("y");
+    drawMap(pages.get(0), 50, 0, width, width/2, 50);
+  }
   text("Main Menu", width/2, 150);
   textSize(12);
-  
+  drawMap(pages.get(0), 50, 0, width, width/2, 50);
+  setTable();
 }
 
 void draw() {
-  if (record){
+  if (record) {
     beginRecord(PDF, "GUI_Structure.PDF");
   }
   background(255);
-   //<>//
+
   for (int i = 0; i < pages.size(); i++) {
     pages.get(i).drawLine();
     pages.get(i).drawNode();
-    
   }
   textSize(20);
   text("Device_01", width/2, 50);
   text("Main Menu", width/2, 150);
   textSize(12);
-  if (record){
+  if (record) {
     endRecord();
+    saveTable(nodes, "nodestore.csv");
     exit();
-  } //<>//
+  }
 }
 
 void getXML(XML xml) {
@@ -82,7 +89,7 @@ XML getPage(XML branch, String parent) {
   }
   if (xmlpages) {
     for (int i=0; i < xmlLeaf.length; i++) {
-      println(xmlLeaf[i].getString("title"));
+      //println(xmlLeaf[i].getString("title"));
       if (getPage(xmlLeaf[i], xmlLeaf[i].getString("title")) == null) {
         pages.add(new Page(xmlLeaf[i].getString("title"), parent));
       } else {
@@ -123,7 +130,7 @@ void drawMap(Page parent, int level, int start, int end, int x, int y) {
     if (adjx > width - 150) {
       adjx = width - 150;
     }
-    println(parent.name());
+    //println(parent.name());
     if ((parent.name().equals("Reporting"))||(parent.name().equals("Production"))||(parent.name().equals("System"))||(parent.name().equals("Access"))) {     
       line(width/2, 150, adjx, adjh);
     } else if ((parent.name().equals("Device_01"))) {
@@ -149,24 +156,35 @@ void familyTree() {
   }
 }
 
-void mouseDragged(){
+void setTable(){
+  for (int i = 0; i<pages.size(); i ++){
+    pgStore.add(nodes.addRow());
+    pgStore.get(i).setString("name", pages.get(i).name());
+    pgStore.get(i).setInt("x", pages.get(i).x());
+    pgStore.get(i).setInt("y", pages.get(i).y());
+  }
+}
+
+void mouseDragged() {
   //println(mousePressed);
   loop();
-  for (int p = 0; p < pages.size(); p ++){
-    if ((mouseX > pages.get(p).x())&&(mouseY > pages.get(p).y()-10)&&(mouseX < (pages.get(p).x()+pages.get(p).leng()))&&(mouseY < pages.get(p).y())){
+  for (int p = 0; p < pages.size(); p ++) {
+    if ((mouseX > pages.get(p).x())&&(mouseY > pages.get(p).y()-10)&&(mouseX < (pages.get(p).x()+pages.get(p).leng()))&&(mouseY < pages.get(p).y())) {
       pages.get(p).storeNode(mouseX-pages.get(p).leng()/2, mouseY+5, pages.get(p).leng());
+      pgStore.get(p).setInt("x", pages.get(p).x());
+      pgStore.get(p).setInt("y", pages.get(p).y());
       pages.get(p).drawLine();
       pages.get(p).drawNode();
     }
   }
 }
 
-void mouseReleased(){
+void mouseReleased() {
   noLoop();
 }
 
-void keyPressed(){
-  if (keyCode == ENTER){
+void keyPressed() {
+  if (keyCode == ENTER) {
     loop();
     record = true;
   }
