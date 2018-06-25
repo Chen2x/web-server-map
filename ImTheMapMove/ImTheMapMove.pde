@@ -31,9 +31,9 @@ void setup() {
       pages.add(np);
       np.storeNode(row.getInt("x"), row.getInt("y"));
     }
+    familyTree();
   
   } else {
-    println("truu");
     nodes = new Table();
     nodes.addColumn("name");
     nodes.addColumn("parent");
@@ -181,14 +181,21 @@ void setTable() {
 }
 
 void mouseDragged() {
-  //println(mousePressed);
+  
   loop();
   for (int p = 0; p < pages.size(); p ++) {
+    println(mouseX > pages.get(p).x(), mouseY > pages.get(p).y()-10, pages.get(p).leng());
     if ((mouseX > pages.get(p).x())&&(mouseY > pages.get(p).y()-10)&&(mouseX < (pages.get(p).x()+pages.get(p).leng()))&&(mouseY < pages.get(p).y())) {
-      pages.get(p).storeNode(mouseX-pages.get(p).leng()/2, mouseY+5);
+      println("truu");
+      pages.get(p).storeNode(mouseX-pages.get(p).leng()/2, mouseY+4);
       pages.get(p).storeLen(pages.get(p).leng());
-      pgStore.get(p).setInt("x", pages.get(p).x());
-      pgStore.get(p).setInt("y", pages.get(p).y());
+      if (!fullRun){
+        pgStore.get(p).setInt("x", pages.get(p).x());
+        pgStore.get(p).setInt("y", pages.get(p).y());
+      } else{
+        nodes.getRow(p).setInt("x", pages.get(p).x());
+        nodes.getRow(p).setInt("y", pages.get(p).y());
+      }
       pages.get(p).drawLine();
       pages.get(p).drawNode();
     }

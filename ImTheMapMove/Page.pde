@@ -14,6 +14,7 @@ class Page {
   }
   //TableRow save = nodes.addRow();
   
+  
   String name() {
     return name;
   }
@@ -37,6 +38,7 @@ class Page {
   void storeNode(int xp, int yp) {
     x = xp;
     y = yp;   
+    leng = int(name.length()*6.5);
     //save.setString("name", name);
     //save.setInt("x", x);
     //save.setInt("y", y);
@@ -44,6 +46,7 @@ class Page {
   
   void storeLen(int len){
     leng = len;
+    
   }
 
   void drawNode() {
